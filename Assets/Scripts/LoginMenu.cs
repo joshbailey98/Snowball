@@ -10,6 +10,7 @@ public class LoginMenu : MonoBehaviour
     public InputField passwordField;
     public Button login;
     private bool previousFocus = false;
+    public Text loginError;
     public void CallLogin()
     {
         StartCoroutine(Login());
@@ -24,12 +25,11 @@ public class LoginMenu : MonoBehaviour
         if (webRequest.text[0] == '0')
         {
             DBManager.username = usernameField.text;
-            Debug.Log("User logged in successfully.");
             SceneManager.LoadScene(3);
         }
         else
         {
-            Debug.Log("Login failed - " + webRequest.text);
+            loginError.text = webRequest.text;
         }
     }
     public void VerifyInputs()

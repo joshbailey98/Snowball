@@ -11,6 +11,7 @@ public class Registration : MonoBehaviour
     public InputField passwordField;
     public InputField confirmField;
     public Button register;
+    public Text registerError;
     private bool previousFocus = false;
 
     public void CallRegister()
@@ -34,7 +35,7 @@ public class Registration : MonoBehaviour
         }
         else
         {
-            Debug.Log("Registration failed. " + webRequest.text);
+            registerError.text = webRequest.text;
         }
     }
 
@@ -51,5 +52,8 @@ public class Registration : MonoBehaviour
             StartCoroutine(Register());
         }
         previousFocus = confirmField.isFocused;
+        if (passwordField.text != "" && confirmField.text != "" && passwordField.text != confirmField.text)
+            registerError.text = "Password and confirm password do not match";
+        else registerError.text = "";
     }
 }
