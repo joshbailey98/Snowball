@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Registration : MonoBehaviour
@@ -13,10 +14,12 @@ public class Registration : MonoBehaviour
     public Button register;
     public Text registerError;
     private bool previousFocus = false;
+    private bool dbError = false;
 
     public void CallRegister()
     {
-        StartCoroutine(Register());
+        if (IsValidEmail(emailField.text))
+            StartCoroutine(Register());
     }
 
     IEnumerator Register()
@@ -25,23 +28,27 @@ public class Registration : MonoBehaviour
         form.AddField("email", emailField.text);
         form.AddField("username", usernameField.text);
         form.AddField("password", passwordField.text);
-        var webRequest = new WWW("http://localhost/snowball/register.php", form);
-        yield return webRequest;
-        if (webRequest.text == "0")
+
+        //using (var www = UnityWebRequest.Post("http://localhost/snowball/register.php", form))
+        using (var www = UnityWebRequest.Post("http://snowball.us-west-2.elasticbeanstalk.com/register.php", form))
         {
-            DBManager.username = usernameField.text;
-            Debug.Log("User registered successfully.");
-            UnityEngine.SceneManagement.SceneManager.LoadScene(3);
-        }
-        else
-        {
-            registerError.text = webRequest.text;
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError || www.downloadHandler.text != "0")
+            {
+                registerError.text = www.downloadHandler.text;
+                dbError = true;
+            }
+            else
+            {
+                DBManager.username = usernameField.text;
+                SceneManager.LoadScene(3);
+            }
         }
     }
 
     public void VerifyInputs()
     {
-        register.interactable = emailField.text != "" && usernameField.text != "" && passwordField.text != "" && passwordField.text == confirmField.text;
+        register.interactable = emailField.text != "" && usernameField.text != "" && passwordField.text != "" && passwordField.text == confirmField.text && IsValidEmail(emailField.text);
     }
 
     // Update is called once per frame
@@ -52,8 +59,28 @@ public class Registration : MonoBehaviour
             StartCoroutine(Register());
         }
         previousFocus = confirmField.isFocused;
-        if (passwordField.text != "" && confirmField.text != "" && passwordField.text != confirmField.text)
-            registerError.text = "Password and confirm password do not match";
-        else registerError.text = "";
+        if (!dbError)
+        {
+            if (emailField.text != "" && !emailField.isFocused && !IsValidEmail(emailField.text))
+                registerError.text = "Invalid email";
+            else registerError.text = "";
+        }
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
+
+    bool IsValidEmail(string email)
+    {
+        try
+        {
+            var addr = new System.Net.Mail.MailAddress(email);
+            return addr.Address == email;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

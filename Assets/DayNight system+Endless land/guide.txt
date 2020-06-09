@@ -1,0 +1,44 @@
+
+in a new scene remove the default camera then add GameEnvironment,
+GameEnvironment include Main Camera.
+or drag and drop GameEnvironment from prefab folder.
+or use demo scene as a starter for your game.
+
+endless land is designed for camera to move right.
+
+remove camera test script and add your own camera script.
+background elements should all be one the same sorting layer example (call it "BACKGROUND") 
+
+land element in resources folder should all be on the same sorting layer example (call it "land") 
+
+
+make sure camera name is always "Main Camera"
+if you want to change camera name please change it in (land remover script line 8) and (land creation script line 14) and (loop script line 11)
+
+if you want to change cloud scrolling speed or star scrolling speed please make sure that
+cloud1 speed the same as cloud2 
+cloud3 speed the same as cloud4
+star1 speed the same as star2
+
+daynight system script has float called (daySpeed) 
+daySpeed=1		 means one day cycle every one minute 
+daySpeed=2		 means two day cycle every one minute 
+
+the game include 5 scripts
+
+-camera test
+a test script to move camera to left 
+
+-land creation
+keeps creating more land on the right of the camera
+
+-land remover
+script to destroy unused land out of the camera on the left
+
+-loop
+loop script for clouds and stars.
+control its speed.
+
+-nightDay System
+script to move the moon, the sun and  control its speed.
+also changes sky colors between night and day.

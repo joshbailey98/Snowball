@@ -3,7 +3,20 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Death Plane
+  - Coin
+  - Gem
+  - Ice
+  - Collideable
+  - Igloo
+  - LevelCompletion
+  - Sun
+  - Cactus
+  - Darkness
+  - Spike
+  - Mushroom
+  - water
   layers:
   - Default
   - TransparentFX
@@ -13,7 +26,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Ground
   - 
   - 
   - 
@@ -38,6 +51,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1552231515
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 2775530763
     locked: 0
